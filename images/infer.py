@@ -5,7 +5,9 @@ from model import classifier
 
 device = torch.device("cpu")
 
-model = classifier(num_classes=5)
+class_names = ["meme", "document", "photo"]
+
+model = classifier(num_classes=3)
 model.load_state_dict(torch.load("models/classifier.pth", map_location=device))
 model.to(device)
 model.eval()
@@ -25,8 +27,8 @@ def classify_image(image):
     with torch.no_grad():
         outputs = model(image)
         _, predicted = torch.max(outputs, 1)
-    return predicted.item()
+    return class_names[predicted.item()]
 
-image_path = "data/test/sample.jpg"
+image_path = "IMAGEPATH"
 predicted_class = classify_image(image_path)
 print(f"Предсказанный класс: {predicted_class}")
